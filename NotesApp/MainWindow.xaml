@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         Icon="\Images\icon.ico"
         WindowStartupLocation="CenterScreen"
-        Title="Notes" Height="400" Width="400" Closing="Window_Closing">
+        Title="Notes" Height="400" Width="400">
     <Window.Background>
 
         <ImageBrush ImageSource="\Images\1.jpg" />
@@ -19,7 +19,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Open" Name="OpenFile" Click="OpenFile_Click"/>
-                <MenuItem Header="Save /Edit file" Name="Save" Click="Save_Click"/>
+                <MenuItem Header="Save file" Name="Save" Click="Save_Click"/>
                 <MenuItem Header="Save as.." Name="SaveFile" Click="SaveFile_Click"/>
                 <MenuItem Header="Delete note" Name="Delete" Click="Delete_Click"/>
                 <Separator></Separator>
@@ -50,7 +50,7 @@
                 <RowDefinition Height="127*"/>
                 <RowDefinition Height="8*"/>
             </Grid.RowDefinitions>
-            <Label Content="Notes"
+            <Label Content="Create note"
                Height="56"
                VerticalAlignment="Center"
                HorizontalContentAlignment="Center"
@@ -60,7 +60,7 @@
                FontSize="40"
                Foreground="Black" 
                FontWeight="Bold" />
-            <TextBox AcceptsReturn="True" Name="TextNote" Margin="0,18,0,16" Grid.Row="1" Grid.RowSpan="3" TextChanged="TextBox_TextChanged"/>
+            <TextBox AcceptsReturn="True" Name="TextNote" Margin="0,18,0,16" Grid.Row="1" Grid.RowSpan="3" />
         </Grid>
     </DockPanel>
 </Window>

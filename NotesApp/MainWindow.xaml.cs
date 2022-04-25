@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Controls;
 using System.IO;
 using System.Windows.Media;
 
@@ -15,19 +14,20 @@ namespace NotesApp
         public string fileName;
         public string filePath = "";
 
+        public MainWindow(object selectedItem)
+        {
+            filePath = selectedItem.ToString();
+            this.Title = "Notes";
+            InitializeComponent();
+            TextNote.Text = File.ReadAllText(filePath);
+        }
+
         public MainWindow()
         {
             this.Title = "Notes";
             InitializeComponent();
-            //var latestModifiedFile = GetLatestModifiedFile(@"Notes");
-            //Console.WriteLine(latestModifiedFile);
-            //System.Diagnostics.Process.Start(latestModifiedFile);
+
         }
-        //static string GetLatestModifiedFile(string directory) // последний измененный/созданный файл
-        //{
-        //    var files = Directory.GetFiles(@"Notes\");
-        //    return files.OrderBy(f => File.GetLastWriteTime(f)).LastOrDefault();
-        //}
 
         public string name
         {
@@ -41,24 +41,17 @@ namespace NotesApp
             }
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Boolean TextBox = false;
-            TextBox = true;
-        }
-
-        private void Save_Click(object sender, RoutedEventArgs e) //Сохранение уже существующего файла / изменение ранее созданного файла
+        private void Save_Click(object sender, RoutedEventArgs e) 
         {
             if (filePath != "")
-                File.WriteAllText(filePath, TextNote.Text); //проработать исключение пустого пути
+                File.WriteAllText(filePath, TextNote.Text);
             else
                 SaveAs();
         }
 
-        private void OpenFile_Click(object sender, RoutedEventArgs e) // Открытие файла из директории
+        private void OpenFile_Click(object sender, RoutedEventArgs e) 
         {
-            Boolean textChanged = false;
-            if (textChanged)
+            if (TextNote.Text != "")
             {
                 var result = System.Windows.MessageBox.Show("Do you want to save the changes?", "Notes", MessageBoxButton.YesNoCancel);
                 switch (result)
@@ -79,7 +72,7 @@ namespace NotesApp
                         return;
                 }
             }
-            System.Windows.Forms.OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.DefaultExt = ".txt";
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files(*.*)|*.*";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -89,11 +82,10 @@ namespace NotesApp
                 fileName = openFileDialog.SafeFileName;
                 filePath = openFileDialog.FileName;
                 name = fileName;
-                textChanged = false;
             }
         }
 
-        private void SaveFile_Click(object sender, RoutedEventArgs e) // Сохранение файла
+        private void SaveFile_Click(object sender, RoutedEventArgs e)
         {
             SaveAs();
 
@@ -108,6 +100,7 @@ namespace NotesApp
             {
                 File.WriteAllText(saveFileDialog1.FileName, TextNote.Text);
                 filePath = saveFileDialog1.FileName;
+                fileName = saveFileDialog1.FileName;
                 name = fileName;
             }
             else
@@ -116,7 +109,7 @@ namespace NotesApp
             }
         }
 
-        private void FontClick(object sender, RoutedEventArgs e) // Шрифт
+        private void FontClick(object sender, RoutedEventArgs e)
         {
             FontDialog fd = new FontDialog();
             var result = fd.ShowDialog();
@@ -135,23 +128,22 @@ namespace NotesApp
         
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) // Закрытие приложения и остановка программы
+        private void Delete_Click(object sender, RoutedEventArgs e) 
         {
-            System.Windows.Application.Current.Shutdown();
-        }
-
-        private void Delete_Click(object sender, RoutedEventArgs e) // Удаление созданной только что заметки
-        {
-            //File.Delete(fileName);
-            DirectoryInfo DI = new DirectoryInfo(@"Notes");
-            try
+            if (filePath != "")
             {
-                DI.Delete(true);
+                try
+                {
+                    File.Delete(filePath);
+                    this.Close();
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    System.Windows.MessageBox.Show("Directory not found", "Notes");
+                }
             }
-            catch (DirectoryNotFoundException)
-            {
-                System.Windows.MessageBox.Show("Directory not found", "Notes");
-            }
+            else
+                System.Windows.MessageBox.Show("File not saved", "Notes");
         }
     }
 }

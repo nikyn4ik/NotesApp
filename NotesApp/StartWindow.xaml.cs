@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using System.IO;
-using Microsoft.Win32;
 
 namespace NotesApp
 {
@@ -42,32 +29,22 @@ namespace NotesApp
             window.ShowDialog();
         }
 
-        private void OpenF(object sender, RoutedEventArgs e)
-        {
-            //OpenFileDialog openFileDialog = new OpenFileDialog();
-            //openFileDialog.DefaultExt = ".txt";
-            //openFileDialog.Filter = "Text files (*.txt)|*.txt|All files(*.*)|*.*";
-            //if (openFileDialog.ShowDialog() == true)
-            //{
-            //    TextBox.Text = File.ReadAllText(openFileDialog.FileName);
-            //    tblStatus.Text = openFileDialog.FileName;
-            //    fileName = openFileDialog.SafeFileName;
-            //    filePath = openFileDialog.FileName;
-            //    name = fileName;
-            //}
-        }
-
         static void CheckDirectory()
         {
             if (Directory.Exists("Notes") == false)
             {
                 Directory.CreateDirectory("Notes");
+                if (Directory.GetFiles("Notes").Length == 0)
+                {
+                    File.WriteAllText(@"Notes\0.txt", "My first notes");
+                }
             }
 
-            if (Directory.GetFiles("Notes").Length == 0)
-            {
-                File.WriteAllText(@"Notes\0.txt", "My first notes");
-            }
+            
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) 
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }
